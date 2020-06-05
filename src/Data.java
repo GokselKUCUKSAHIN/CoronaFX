@@ -1,14 +1,6 @@
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +13,12 @@ public class Data
     public static void main(String[] args) throws IOException
     {
         ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-        HashMap<String,Country> countries = recordParser(contList);
-        for (Country i : countries.values()) {
-            System.out.println(i.toString());
+        Country.countries = recordParser(contList);
+        for (Country country : Country.countries.values())
+        {
+            System.out.println(country.toString());
         }
-        System.out.println(countries.get("ZW"));
+
     }
 /*
     private static ArrayList<String> loadDataFromTxt(String FileName) throws FileNotFoundException

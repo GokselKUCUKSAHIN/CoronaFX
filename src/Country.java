@@ -3,13 +3,13 @@ import java.util.Map;
 
 public class Country
 {
-
+    public static HashMap<String, Country> countries = new HashMap<>();
     private String name;
     private String geoId;
     private String code;
     private int population;
     private String continent;
-    public static HashMap<String, Country> countries = new HashMap<>();
+
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
@@ -22,6 +22,31 @@ public class Country
             throw new IllegalArgumentException();
         }
         this.population = population;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getGeoId()
+    {
+        return geoId;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public int getPopulation()
+    {
+        return population;
+    }
+
+    public String getContinent()
+    {
+        return continent;
     }
 
     @Override
