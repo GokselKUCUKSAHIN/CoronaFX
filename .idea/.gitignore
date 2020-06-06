@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+# Default ignored files
+/shelf/
+/workspace.xml
+=======
 ### JAVA GIT IGNORE
 
 
@@ -30,3 +35,4 @@ hs_err_pid*
 *.iml
 *.xml
 *.kotlin_module
+>>>>>>> origin/master
