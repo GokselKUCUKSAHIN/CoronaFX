@@ -1,5 +1,6 @@
 public class Record
 {
+
     private String date;
     private int day;
     private int month;
@@ -11,5 +12,4 @@ public class Record
         this.month = month;
         this.year = year;
     }
-
 }
