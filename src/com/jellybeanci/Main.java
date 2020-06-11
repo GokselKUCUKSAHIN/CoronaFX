@@ -1,6 +1,5 @@
 package com.jellybeanci;
 
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class Main extends Application
@@ -17,8 +15,8 @@ public class Main extends Application
     public static ObservableList<Node> child;
     //
     private static final String title = "CoronaFX -JellyBeanci";
-    public static final int width = 600;
-    public static final int height = 600;
+    public static final int width = 800;
+    public static final int height = 800;
 
     private ObservableList<Country> countryData = FXCollections.observableArrayList();
 
@@ -34,11 +32,16 @@ public class Main extends Application
                     System.out.println("There is no HELP!");
                     break;
                 }
+                case F2:
+                {
+                    System.out.println("Hello Suckers");
+                    break;
+                }
             }
         });
         stage.setTitle(title);
-        stage.setMinHeight(400);
-        stage.setMinWidth(400);
+        stage.setMinHeight(750);
+        stage.setMinWidth(750);
         stage.setScene(new Scene(root, width - 10, height - 10));
         stage.show();
         root.requestFocus();

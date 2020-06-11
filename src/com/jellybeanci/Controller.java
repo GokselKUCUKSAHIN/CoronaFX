@@ -15,6 +15,9 @@ public class Controller
 {
 
     @FXML
+    public VBox mainVBox;
+
+    @FXML
     private TextField textBox;
 
     @FXML
@@ -24,53 +27,38 @@ public class Controller
     protected void onGetDataClick()
     {
         btnGetData.setDisable(true);
-        Runnable r = new Runnable()
-        {
-            public void run()
+        Runnable r = () -> {
+            ArrayList<String> contList = null;
+            try
             {
-                ArrayList<String> contList = null;
-                try
-                {
-                    buttonChangeText(btnGetData, "Getting Data...");
-                    contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-                    buttonChangeText(btnGetData, "Data Found Loading...");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-                Record.parse(contList);
-                buttonChangeText(btnGetData, "Get Data");
-                btnGetData.setDisable(false);
-                tableView.setItems(Country.getObservableList());
+                buttonChangeText(btnGetData, "Getting Data...");
+                contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
+                buttonChangeText(btnGetData, "Data Found Loading...");
             }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            assert contList != null;
+            Record.parse(contList);
+            buttonChangeText(btnGetData, "Get Data");
+            btnGetData.setDisable(false);
+            tableView.setItems(Country.getObservableList());
         };
         new Thread(r).start();
     }
 
     protected void buttonChangeText(Button button, String text)
     {
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                button.setText(text);
-            }
-        });
+        Platform.runLater(() -> button.setText(text));
     }
 
     @FXML
     protected void threadTestButton()
     {
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // Update UI here.
-                btnGetData.setText(Math.random() + "");
-            }
+        Platform.runLater(() -> {
+            // Update UI here.
+            btnGetData.setText(Math.random() + "");
         });
     }
 
