@@ -167,12 +167,6 @@ public class Country
     }
 
     @Override
-    public boolean equals(Object other)
-    {
-        return (this.getGeoId().equals(((Country) other).getGeoId()));
-    }
-
-    @Override
     public String toString()
     {
         return String.format("%s %d %d %d %d %d %f %f", getName(), getTotalCases(), getNewCases(), getTotalDeaths(), getNewDeaths(), getPopulation(), getMortality(), getAttackRate());
