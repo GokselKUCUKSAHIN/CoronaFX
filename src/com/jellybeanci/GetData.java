@@ -1,32 +1,29 @@
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+package com.jellybeanci;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import com.jellybeanci.Country;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Data
+public class GetData
 {
 
     public static void main(String[] args) throws IOException
     {
         ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-        HashMap<String,Country> countries = recordParser(contList);
-        for (Country i : countries.values()) {
-            System.out.println(i.toString());
+        // FOR-EACH
+        Record.parse(contList);
+        for (Country country : Country.countries.values())
+        {
+            System.out.println(country.toString());
         }
-        System.out.println(countries.get("ZW"));
     }
+
 /*
     private static ArrayList<String> loadDataFromTxt(String FileName) throws FileNotFoundException
     {
@@ -105,24 +102,6 @@ public class Data
         }
     }
 
-    private static HashMap<String, Country> recordParser(ArrayList<String> recordList)
-    {
-        HashMap<String, Country> countries = new HashMap<>();
-        String regex = "<record><dateRep>(.*)</dateRep><day>(.*)</day><month>(.*)</month><year>(.*)</year><cases>(.*)</cases><deaths>(.*)</deaths><countriesAndTerritories>(.*)</countriesAndTerritories><geoId>(.*)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData2018>(\\d{1,})</popData2018><continentExp>(.*)</continentExp></record>";
-        Pattern recordPattern = Pattern.compile(regex);
-        for (String record : recordList)
-        {
-            Matcher matcher = recordPattern.matcher(record);
-            if (matcher.find())
-            {
-                if (countries.containsKey(matcher.group(8)))
-                {
-                    countries.putIfAbsent(matcher.group(8), new Country(matcher.group(7), matcher.group(8), matcher.group(9), Integer.parseInt(matcher.group(10)), matcher.group(11)));
-                }
-            }
-        }
-        return countries;
-    }
 
     private static ArrayList<String> readFromWeb(String webURL) throws IOException
     {
