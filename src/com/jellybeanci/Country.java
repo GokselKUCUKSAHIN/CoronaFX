@@ -49,6 +49,11 @@ public class Country
 
     public void insertRecord(Record record)
     {
+        if(records.size() == 0)
+        {
+            this.newCases.set(record.getCases());
+            this.newDeaths.set(record.getDeaths());
+        }
         if (!this.records.containsKey(record.getDate()))
         {
             // Add to record list.
@@ -63,14 +68,12 @@ public class Country
 
     private void updateCases(int cases)
     {
-        this.newCases.set(cases);
-        this.totalCases.set(getTotalCases() + getNewCases());
+        this.totalCases.set(getTotalCases() + cases);
     }
 
     private void updateDeaths(int deaths)
     {
-        this.newDeaths.set(deaths);
-        this.totalDeaths.set(getTotalDeaths() + getNewDeaths());
+        this.totalDeaths.set(getTotalDeaths() + deaths);
     }
 
     private void calculatedValues()
