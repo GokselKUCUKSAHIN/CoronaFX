@@ -4,11 +4,15 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+
 public class Country
 {
+
     // 'Global' Whole Country List
     public static HashMap<String, Country> countries = new HashMap<>();
     // All record of 'this' Country
@@ -32,9 +36,27 @@ public class Country
             throw new IllegalArgumentException();
         }
         this.population = new SimpleIntegerProperty(population);
-        //
-
     }
+
+    public void insertRecord(Record record)
+    {
+        if (this.records.containsKey(record.getDate()))
+        {
+            records.putIfAbsent(record.getDate(), record);
+        }
+    }
+
+
+    public static ObservableList<Country> getObservableList()
+    {
+        ObservableList<Country> observableList = FXCollections.observableArrayList();
+        for (Country country : Country.countries.values())
+        {
+            observableList.add(country);
+        }
+        return observableList;
+    }
+
 
     public String getName()
     {
@@ -61,5 +83,9 @@ public class Country
         return continent.get();
     }
 
-
+    @Override
+    public String toString()
+    {
+        return String.format("%s %s", getName(), getGeoId());
+    }
 }
