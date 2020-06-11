@@ -98,6 +98,16 @@ public class Country
         return observableList;
     }
 
+    public ObservableList<Record> getRecordList()
+    {
+        ObservableList<Record> observableList = FXCollections.observableArrayList();
+        for (Record record : this.records.values())
+        {
+            observableList.add(record);
+        }
+        return observableList;
+    }
+
     public String getName()
     {
         return name.get();
