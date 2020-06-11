@@ -31,24 +31,33 @@ public class Controller
                 ArrayList<String> contList = null;
                 try
                 {
+                    buttonChangeText(btnGetData, "Getting Data...");
                     contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
+                    buttonChangeText(btnGetData, "Data Found Loading...");
                 }
                 catch (IOException e)
                 {
                     e.printStackTrace();
                 }
                 Record.parse(contList);
-                /*
-                for (Country country : Country.countries.values())
-                {
-                    System.out.println(country.toString());
-                }
-                */
+                buttonChangeText(btnGetData, "Get Data");
                 btnGetData.setDisable(false);
                 tableView.setItems(Country.getObservableList());
             }
         };
         new Thread(r).start();
+    }
+
+    protected void buttonChangeText(Button button, String text)
+    {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                button.setText(text);
+            }
+        });
     }
 
     @FXML
