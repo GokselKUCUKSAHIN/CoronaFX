@@ -2,13 +2,13 @@ package com.jellybeanci;
 
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class Main extends Application
@@ -20,6 +20,8 @@ public class Main extends Application
     public static final int width = 600;
     public static final int height = 600;
 
+    private ObservableList<Country> countryData = FXCollections.observableArrayList();
+
     @Override
     public void start(Stage stage) throws Exception
     {
@@ -29,8 +31,7 @@ public class Main extends Application
             {
                 case F1:
                 {
-                    //Show Child Count
-                    System.out.println("Child Count: " + root.getChildrenUnmodifiable().size());
+                    System.out.println("There is no HELP!");
                     break;
                 }
             }
@@ -41,6 +42,11 @@ public class Main extends Application
         stage.setScene(new Scene(root, width - 10, height - 10));
         stage.show();
         root.requestFocus();
+    }
+
+    public ObservableList<Country> getCountryData()
+    {
+        return countryData;
     }
 
     public static void main(String[] args)

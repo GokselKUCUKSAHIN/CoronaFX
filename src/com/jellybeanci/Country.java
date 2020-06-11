@@ -1,63 +1,65 @@
 package com.jellybeanci;
 
-import java.util.HashMap;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 public class Country
 {
+    // 'Global' Whole Country List
     public static HashMap<String, Country> countries = new HashMap<>();
-    private String name;
-    private String geoId;
-    private String code;
-    private int population;
-    private String continent;
+    // All record of 'this' Country
+    private final HashMap<LocalDate, Record> records = new HashMap<>();
+    private final StringProperty name;
+    private final StringProperty geoId;
+    private final StringProperty code;
+    private final IntegerProperty population;
+    private final StringProperty continent;
+    //
+
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
-        this.name = name;
-        this.geoId = geoId;
-        this.code = code;
-        this.continent = continent;
+        this.name = new SimpleStringProperty(name);
+        this.geoId = new SimpleStringProperty(geoId);
+        this.code = new SimpleStringProperty(code);
+        this.continent = new SimpleStringProperty(continent);
         if (population <= 0)
         {
             throw new IllegalArgumentException();
         }
-        this.population = population;
+        this.population = new SimpleIntegerProperty(population);
+        //
+
     }
 
     public String getName()
     {
-        return name;
+        return name.get();
     }
 
     public String getGeoId()
     {
-        return geoId;
+        return geoId.get();
     }
 
     public String getCode()
     {
-        return code;
+        return code.get();
     }
 
     public int getPopulation()
     {
-        return population;
+        return population.get();
     }
 
     public String getContinent()
     {
-        return continent;
+        return continent.get();
     }
 
-    @Override
-    public String toString()
-    {
-        return "com.jellybeanci.Country{" +
-                "name='" + name + '\'' +
-                ", geoId='" + geoId + '\'' +
-                ", code='" + code + '\'' +
-                ", population=" + population +
-                ", continent='" + continent + '\'' +
-                '}';
-    }
+
 }

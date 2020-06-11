@@ -1,3 +1,5 @@
+package com.jellybeanci;
+
 import com.jellybeanci.Country;
 
 import java.io.*;
@@ -9,13 +11,14 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Data
+public class GetData
 {
 
     public static void main(String[] args) throws IOException
     {
         ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
         Country.countries = recordParser(contList);
+        // FOR-EACH
         for (Country country : Country.countries.values())
         {
             System.out.println(country.toString());
@@ -102,17 +105,17 @@ public class Data
 
     private static HashMap<String, Country> recordParser(ArrayList<String> recordList)
     {
-        HashMap<String, Country> countries = new HashMap<>();
-        String regex = "<record><dateRep>(.*)</dateRep><day>(.*)</day><month>(.*)</month><year>(.*)</year><cases>(.*)</cases><deaths>(.*)</deaths><countriesAndTerritories>(.*)</countriesAndTerritories><geoId>(.*)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData2018>(\\d{1,})</popData2018><continentExp>(.*)</continentExp></record>";
+        String regex = "<record><dateRep>(.+)</dateRep><day>(.+)</day><month>(.+)</month><year>(.+)</year><cases>(.+)</cases><deaths>(.+)</deaths><countriesAndTerritories>(.+)</countriesAndTerritories><geoId>(.+)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData2018>(\\d{1,})</popData2018><continentExp>(.+)</continentExp></record>";
         Pattern recordPattern = Pattern.compile(regex);
         for (String record : recordList)
         {
             Matcher matcher = recordPattern.matcher(record);
             if (matcher.find())
             {
-                if (countries.containsKey(matcher.group(8)))
+                if (Country.countries.containsKey(matcher.group(8)))
                 {
-                    countries.putIfAbsent(matcher.group(8), new Country(matcher.group(7), matcher.group(8), matcher.group(9), Integer.parseInt(matcher.group(10)), matcher.group(11)));
+                    Country.countries.putIfAbsent(matcher.group(8), new Country(matcher.group(7),
+                            matcher.group(8), matcher.group(9), Integer.parseInt(matcher.group(10)), matcher.group(11)));
                 }
             }
         }

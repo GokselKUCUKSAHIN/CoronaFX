@@ -7,6 +7,9 @@ public class Controller
 {
 
     @FXML
+    public TableView tableView;
+
+    @FXML
     private TextField textBox;
 
     @FXML
@@ -16,6 +19,5 @@ public class Controller
     protected void onGetDataClick()
     {
         btnGetData.setText(Math.random() + "");
-
     }
 }
