@@ -17,12 +17,11 @@ public class GetData
     {
         ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
         // FOR-EACH
-        RecordParser.recordParser(contList);
+        Record.parse(contList);
         for (Country country : Country.countries.values())
         {
             System.out.println(country.toString());
         }
-
     }
 
 /*

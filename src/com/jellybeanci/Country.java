@@ -1,9 +1,6 @@
 package com.jellybeanci;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -23,7 +20,12 @@ public class Country
     private final IntegerProperty population;
     private final StringProperty continent;
     //
-
+    private final IntegerProperty newCases;
+    private final IntegerProperty totalCases;
+    private final IntegerProperty newDeaths;
+    private final IntegerProperty totalDeaths;
+    private final DoubleProperty mortality;
+    private final DoubleProperty attackRate;
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
@@ -36,16 +38,55 @@ public class Country
             throw new IllegalArgumentException();
         }
         this.population = new SimpleIntegerProperty(population);
+        //
+        newCases = new SimpleIntegerProperty(0);
+        totalCases = new SimpleIntegerProperty(0);
+        newDeaths = new SimpleIntegerProperty(0);
+        totalDeaths = new SimpleIntegerProperty(0);
+        mortality = new SimpleDoubleProperty(0);
+        attackRate = new SimpleDoubleProperty(0);
     }
 
     public void insertRecord(Record record)
     {
         if (this.records.containsKey(record.getDate()))
         {
+            // Add to record list.
             records.putIfAbsent(record.getDate(), record);
+
+            // And update values.
+            updateCases(record.getCases());
+            updateDeaths(record.getDeaths());
+            calculatedValues();
         }
     }
 
+    private void updateCases(int cases)
+    {
+        this.newCases.set(cases);
+        this.totalCases.set(totalCases.get() + newCases.get());
+    }
+
+    private void updateDeaths(int deaths)
+    {
+        this.newDeaths.set(deaths);
+        this.totalDeaths.set(totalDeaths.get() + newDeaths.get());
+    }
+
+    private void calculatedValues()
+    {
+        // Mortality
+        if (totalCases.get() <= 0)
+        {
+            mortality.set(0);
+        } else
+        {
+            mortality.set(totalDeaths.get() / (double) totalCases.get());
+        }
+
+        // Attack Rate
+        attackRate.set(totalCases.get() / (double) population.get());
+    }
 
     public static ObservableList<Country> getObservableList()
     {
@@ -56,7 +97,6 @@ public class Country
         }
         return observableList;
     }
-
 
     public String getName()
     {
@@ -81,6 +121,12 @@ public class Country
     public String getContinent()
     {
         return continent.get();
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        return (this.getGeoId().equals(((Country) other).getGeoId()));
     }
 
     @Override
