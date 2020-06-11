@@ -1,5 +1,6 @@
+package com.jellybeanci;
+
 import java.util.HashMap;
-import java.util.Map;
 
 public class Country
 {
@@ -9,7 +10,6 @@ public class Country
     private String code;
     private int population;
     private String continent;
-
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
@@ -52,7 +52,7 @@ public class Country
     @Override
     public String toString()
     {
-        return "Country{" +
+        return "com.jellybeanci.Country{" +
                 "name='" + name + '\'' +
                 ", geoId='" + geoId + '\'' +
                 ", code='" + code + '\'' +

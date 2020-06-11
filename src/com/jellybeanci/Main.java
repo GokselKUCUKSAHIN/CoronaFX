@@ -13,14 +13,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application
 {
+
     public static ObservableList<Node> child;
     //
     private static final String title = "CoronaFX -JellyBeanci";
     public static final int width = 600;
     public static final int height = 600;
-    private static Color backcolor = Color.rgb(51, 51, 51);
-    private static Font font = new Font("Calibri",15);
-    private static Timeline update;
 
     @Override
     public void start(Stage stage) throws Exception
@@ -31,20 +29,8 @@ public class Main extends Application
             {
                 case F1:
                 {
-                    //PLAY
-                    update.play();
-                    break;
-                }
-                case F2:
-                {
-                    //PAUSE
-                    update.pause();
-                    break;
-                }
-                case F3:
-                {
                     //Show Child Count
-                    System.out.println("Child Count: " + child.size());
+                    System.out.println("Child Count: " + root.getChildrenUnmodifiable().size());
                     break;
                 }
             }
@@ -52,7 +38,7 @@ public class Main extends Application
         stage.setTitle(title);
         stage.setMinHeight(400);
         stage.setMinWidth(400);
-        stage.setScene(new Scene(root, width - 10, height - 10, backcolor));
+        stage.setScene(new Scene(root, width - 10, height - 10));
         stage.show();
         root.requestFocus();
     }
