@@ -49,10 +49,10 @@ public class Country
 
     public void insertRecord(Record record)
     {
-        if (this.records.containsKey(record.getDate()))
+        if (!this.records.containsKey(record.getDate()))
         {
             // Add to record list.
-            records.putIfAbsent(record.getDate(), record);
+            this.records.putIfAbsent(record.getDate(), record);
 
             // And update values.
             updateCases(record.getCases());
@@ -64,28 +64,28 @@ public class Country
     private void updateCases(int cases)
     {
         this.newCases.set(cases);
-        this.totalCases.set(totalCases.get() + newCases.get());
+        this.totalCases.set(getTotalCases() + getNewCases());
     }
 
     private void updateDeaths(int deaths)
     {
         this.newDeaths.set(deaths);
-        this.totalDeaths.set(totalDeaths.get() + newDeaths.get());
+        this.totalDeaths.set(getTotalDeaths() + getNewDeaths());
     }
 
     private void calculatedValues()
     {
         // Mortality
-        if (totalCases.get() <= 0)
+        if (getTotalCases() <= 0)
         {
             mortality.set(0);
         } else
         {
-            mortality.set(totalDeaths.get() / (double) totalCases.get());
+            mortality.set(getTotalDeaths() / (double) getTotalCases());
         }
 
         // Attack Rate
-        attackRate.set(totalCases.get() / (double) population.get());
+        attackRate.set(getTotalCases() / (double) getPopulation());
     }
 
     public static ObservableList<Country> getObservableList()
@@ -123,6 +123,36 @@ public class Country
         return continent.get();
     }
 
+    public int getNewCases()
+    {
+        return newCases.get();
+    }
+
+    public int getTotalCases()
+    {
+        return totalCases.get();
+    }
+
+    public int getNewDeaths()
+    {
+        return newDeaths.get();
+    }
+
+    public int getTotalDeaths()
+    {
+        return totalDeaths.get();
+    }
+
+    public double getMortality()
+    {
+        return mortality.get();
+    }
+
+    public double getAttackRate()
+    {
+        return attackRate.get();
+    }
+
     @Override
     public boolean equals(Object other)
     {
@@ -132,6 +162,6 @@ public class Country
     @Override
     public String toString()
     {
-        return String.format("%s %s", getName(), getGeoId());
+        return String.format("%s %d %d %d %d %d %f %f", getName(), getTotalCases(), getNewCases(), getTotalDeaths(), getNewDeaths(), getPopulation(), getMortality(), getAttackRate());
     }
 }

@@ -68,7 +68,7 @@ public class Record
                     // Create new Country if doesn't exist
                     if (!Country.countries.containsKey(matcher.group(8)))
                     {
-                        System.out.println(matcher.group(8));
+                        //System.out.println(matcher.group(8));
                         Country.countries.putIfAbsent(matcher.group(8),
                                 new Country(
                                         matcher.group(7),
