@@ -16,7 +16,6 @@ public class GetData
     public static void main(String[] args) throws IOException
     {
         ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-        // FOR-EACH
         Record.parse(contList);
         for (Country country : Country.countries.values())
         {
@@ -103,7 +102,7 @@ public class GetData
     }
 
 
-    private static ArrayList<String> readFromWeb(String webURL) throws IOException
+    public static ArrayList<String> readFromWeb(String webURL) throws IOException
     {
         ArrayList<String> records = new ArrayList<>();
         URL url = new URL(webURL);
