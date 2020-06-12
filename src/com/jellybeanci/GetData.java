@@ -23,8 +23,6 @@ public class GetData
             System.out.println(isURL(scanner.nextLine()));
         }
 
-
-
         /*ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
         Record.parse(contList);
         for (Country country : Country.countries.values())

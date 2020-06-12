@@ -4,11 +4,10 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class Country
+public class Country implements Comparable<Country>
 {
 
     // 'Global' Whole Country List
@@ -27,7 +26,6 @@ public class Country
     private final IntegerProperty totalDeaths;
     private final DoubleProperty mortality;
     private final DoubleProperty attackRate;
-    private final Comparator<Record> comparator = Comparator.comparingInt(Record::getDateNumber);
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
@@ -104,8 +102,7 @@ public class Country
 
     public ObservableList<Record> getRecordList()
     {
-        FXCollections.sort(records, comparator);
-        return this.records;
+        return this.records.sorted();
     }
 
     public String getName()
@@ -163,9 +160,16 @@ public class Country
         return attackRate.get();
     }
 
+
     @Override
     public String toString()
     {
         return String.format("%s %d %d %d %d %d %f %f", getName(), getTotalCases(), getNewCases(), getTotalDeaths(), getNewDeaths(), getPopulation(), getMortality(), getAttackRate());
+    }
+
+    @Override
+    public int compareTo(Country other)
+    {
+        return (this.getCode().compareTo(other.getCode()));
     }
 }

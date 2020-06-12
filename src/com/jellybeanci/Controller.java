@@ -1,22 +1,34 @@
 package com.jellybeanci;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Controller
 {
 
     @FXML
-    private LineChart<Integer, Integer> lineChart;
+    private StackedBarChart<?, ?> barChart;
+
+    @FXML
+    private LineChart<?, ?> lineChart;
+
+    @FXML
+    private CategoryAxis x;
+
+    @FXML
+    private NumberAxis y;
 
     @FXML
     private Button btnShow;
@@ -81,6 +93,9 @@ public class Controller
         Platform.runLater(() -> {
             lineChart.getData().clear();
             ObservableList<Country> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
+            SortedList<String> categories = getCategories(selectedCountries);
+            x.invalidateRange(categories);
+            x.autosize();
             for (Country country : selectedCountries)
             {
                 XYChart.Series dataSeries = new XYChart.Series();
@@ -95,6 +110,24 @@ public class Controller
                 lineChart.getData().add(dataSeries);
             }
         });
+    }
+
+    private SortedList<String> getCategories(ObservableList<Country> selectedCountries)
+    {
+
+        ObservableList<String> observableList = FXCollections.observableArrayList();
+        for (Country country : selectedCountries)
+        {
+            ObservableList<Record> records = country.getRecordList();
+            for (Record record : records)
+            {
+                if (!observableList.contains(record.getDateString()))
+                {
+                    observableList.add(record.getDateString());
+                }
+            }
+        }
+        return observableList.sorted();
     }
 
     //
@@ -169,7 +202,6 @@ public class Controller
             }
         });
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        lineChart.setAnimated(false);
     }
 
     private static void showMessage(String title, String message, Alert.AlertType alertType)

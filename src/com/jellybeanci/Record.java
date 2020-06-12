@@ -21,7 +21,7 @@ public class Record implements Comparable<Record>
     public Record(int day, int month, int year, int cases, int deaths)
     {
         this.dateNumber = new SimpleIntegerProperty(Integer.parseInt(String.format("%04d%02d%02d", year, month, day)));
-        this.dateString = new SimpleStringProperty(String.format("%d/%d/%d", year, month, day));
+        this.dateString = new SimpleStringProperty(String.format("%4d %02d %02d", year, month, day));
         this.cases = new SimpleIntegerProperty(cases);
         this.deaths = new SimpleIntegerProperty(deaths);
     }
