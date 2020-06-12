@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Country
@@ -13,7 +14,7 @@ public class Country
     // 'Global' Whole Country List
     public static HashMap<String, Country> countries = new HashMap<>();
     // All record of 'this' Country
-    private final HashMap<LocalDate, Record> records = new HashMap<>();
+    private final ObservableList<Record> records = FXCollections.observableArrayList();
     private final StringProperty name;
     private final StringProperty geoId;
     private final StringProperty code;
@@ -26,6 +27,7 @@ public class Country
     private final IntegerProperty totalDeaths;
     private final DoubleProperty mortality;
     private final DoubleProperty attackRate;
+    private final Comparator<Record> comparator = Comparator.comparingInt(Record::getDateNumber);
 
     public Country(String name, String geoId, String code, int population, String continent)
     {
@@ -49,16 +51,15 @@ public class Country
 
     public void insertRecord(Record record)
     {
-        if(records.size() == 0)
+        if (records.size() == 0)
         {
             this.newCases.set(record.getCases());
             this.newDeaths.set(record.getDeaths());
         }
-        if (!this.records.containsKey(record.getDate()))
+        if (!this.records.contains(record))
         {
             // Add to record list.
-            this.records.putIfAbsent(record.getDate(), record);
-
+            this.records.add(record);
             // And update values.
             updateCases(record.getCases());
             updateDeaths(record.getDeaths());
@@ -103,12 +104,8 @@ public class Country
 
     public ObservableList<Record> getRecordList()
     {
-        ObservableList<Record> observableList = FXCollections.observableArrayList();
-        for (Record record : this.records.values())
-        {
-            observableList.add(record);
-        }
-        return observableList;
+        FXCollections.sort(records, comparator);
+        return this.records;
     }
 
     public String getName()

@@ -11,14 +11,12 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Optional;
 
 public class Controller
 {
 
     @FXML
-    private LineChart<String, Integer> lineChart;
+    private LineChart<Integer, Integer> lineChart;
 
     @FXML
     private Button btnShow;
@@ -80,22 +78,23 @@ public class Controller
     @FXML
     protected void getSelectedCountries()
     {
-        lineChart.getData().clear();
-        ObservableList<Country> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
-        for (Country country : selectedCountries)
-        {
-            XYChart.Series dataSeries = new XYChart.Series();
-            dataSeries.setName(country.getCode());
-            ObservableList<Record> recs = country.getRecordList();
-            //recs.sorted(Comparator.reverseOrder());
-            int total = 0;
-            for (Record record : recs)
+        Platform.runLater(() -> {
+            lineChart.getData().clear();
+            ObservableList<Country> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
+            for (Country country : selectedCountries)
             {
-                total += record.getCases();
-                dataSeries.getData().add(new XYChart.Data<String, Integer>(record.getDate().toString(), total));
+                XYChart.Series dataSeries = new XYChart.Series();
+                dataSeries.setName(country.getCode());
+                ObservableList<Record> recs = country.getRecordList();
+                int total = 0;
+                for (Record record : recs)
+                {
+                    total += record.getCases();
+                    dataSeries.getData().add(new XYChart.Data<>(record.getDateString(), total));
+                }
+                lineChart.getData().add(dataSeries);
             }
-            lineChart.getData().add(dataSeries);
-        }
+        });
     }
 
     //
@@ -170,7 +169,7 @@ public class Controller
             }
         });
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        lineChart.getXAxis().setAutoRanging(true);
+        lineChart.setAnimated(false);
     }
 
     private static void showMessage(String title, String message, Alert.AlertType alertType)

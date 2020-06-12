@@ -1,9 +1,6 @@
 package com.jellybeanci;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,25 +12,27 @@ import java.util.regex.Pattern;
 public class Record implements Comparable<Record>
 {
 
-    private final ObjectProperty<LocalDate> date;
+    //private final ObjectProperty<LocalDate> date;
+    private final IntegerProperty dateNumber;
     private final IntegerProperty cases;
     private final IntegerProperty deaths;
+    private final StringProperty dateString;
 
     public Record(int day, int month, int year, int cases, int deaths)
     {
-        this.date = new SimpleObjectProperty<>(LocalDate.of(year, month, day));
+        this.dateNumber = new SimpleIntegerProperty(Integer.parseInt(String.format("%04d%02d%02d", year, month, day)));
+        this.dateString = new SimpleStringProperty(String.format("%d/%d/%d", year, month, day));
         this.cases = new SimpleIntegerProperty(cases);
         this.deaths = new SimpleIntegerProperty(deaths);
     }
 
-    public LocalDate getDate()
+    public int getDateNumber()
     {
-        return date.get();
+        return this.dateNumber.get();
     }
-
-    public ObjectProperty<LocalDate> dateProperty()
+    public String getDateString()
     {
-        return date;
+        return dateString.get();
     }
 
     public int getCases()
@@ -41,19 +40,9 @@ public class Record implements Comparable<Record>
         return cases.get();
     }
 
-    public IntegerProperty casesProperty()
-    {
-        return cases;
-    }
-
     public int getDeaths()
     {
         return deaths.get();
-    }
-
-    public IntegerProperty deathsProperty()
-    {
-        return deaths;
     }
 
     public static void parse(ArrayList<String> recordList)
@@ -100,8 +89,8 @@ public class Record implements Comparable<Record>
     }
 
     @Override
-    public int compareTo(Record o)
+    public int compareTo(Record other)
     {
-        return date.get().compareTo(o.date.get());
+        return ((Integer) this.dateNumber.get()).compareTo(other.dateNumber.get());
     }
 }
