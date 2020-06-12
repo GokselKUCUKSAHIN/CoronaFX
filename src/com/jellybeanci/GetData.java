@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,44 +16,21 @@ public class GetData
 
     public static void main(String[] args) throws IOException
     {
-        ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
+        Scanner scanner = new Scanner(System.in);
+        while (true)
+        {
+            System.out.print("Enter->");
+            System.out.println(isURL(scanner.nextLine()));
+        }
+
+
+
+        /*ArrayList<String> contList = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
         Record.parse(contList);
         for (Country country : Country.countries.values())
         {
             System.out.println(country.toString());
-        }
-    }
-
-/*
-    private static ArrayList<String> loadDataFromTxt(String FileName) throws FileNotFoundException
-    {
-        ArrayList<String> rows = new ArrayList<>();
-        String path = "QueryFolder/" + FileName; //res/data.txt //default
-        File file = new File(path);
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine())
-        {
-            //Scan everyline and append to arrayList
-            rows.add(scanner.nextLine());
-        }
-        return rows;
-    }*/
-
-    public static void printData()
-    {
-        try
-        {
-            ArrayList<String> data = readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-            for (String record : data)
-            {
-                System.out.println(record);
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
+        }*/
     }
 
     public static void download(String urlString) throws IOException
@@ -102,11 +80,78 @@ public class GetData
     }
 
 
+    public static ArrayList<String> getDataFromAnywhere(String path) throws IOException
+    {
+        Reader reader;
+        if (isURL(path))
+        {
+            //URL
+            URL url = new URL(path);
+            InputStream is = url.openStream();
+            reader = new InputStreamReader(is);
+        } else
+        {
+            //Maybe File
+            File file = new File(path);
+            if (file.isDirectory() || !file.exists())
+            {
+                throw new FileNotFoundException("File Not Found");
+            } else
+            {
+                reader = new FileReader(file);
+            }
+        }
+        // READER DONE
+        ArrayList<String> records = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(reader))
+        {
+            boolean isStarted = false;
+            String record = "";
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                line = line.trim();
+                if (isStarted && !line.equals("</records>"))
+                {
+                    record += line;
+                    if (line.equals("</record>"))
+                    {
+                        //record is complete save it and restart!
+                        records.add(record);
+                        record = "";
+                    }
+                }
+                if (!isStarted && line.equals("<records>"))
+                {
+                    isStarted = true;
+                }
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            throw new MalformedURLException("URL is malformed!!");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new IOException();
+        }
+        return records;
+    }
+
+    public static boolean isURL(String path)
+    {
+        return (path.matches("http[s]?://(www)?(.*)"));
+    }
+/*
+
     public static ArrayList<String> readFromWeb(String webURL) throws IOException
     {
         ArrayList<String> records = new ArrayList<>();
         URL url = new URL(webURL);
         InputStream is = url.openStream();
+        Reader rdr = new InputStreamReader(is);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is)))
         {
             boolean isStarted = false;
@@ -143,4 +188,40 @@ public class GetData
         }
         return records;
     }
+
+    public static ArrayList<String> readFromFile(String dataPath) throws IOException
+    {
+        ArrayList<String> records = new ArrayList<>();
+        File xmlFile = new File(dataPath);
+        try (BufferedReader br = new BufferedReader(new FileReader(xmlFile)))
+        {
+            boolean isStarted = false;
+            String record = "";
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                line = line.trim();
+                if (isStarted && !line.equals("</records>"))
+                {
+                    record += line;
+                    if (line.equals("</record>"))
+                    {
+                        //record is complete save it and restart!
+                        records.add(record);
+                        record = "";
+                    }
+                }
+                if (!isStarted && line.equals("<records>"))
+                {
+                    isStarted = true;
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new IOException();
+        }
+        return records;
+    }*/
 }

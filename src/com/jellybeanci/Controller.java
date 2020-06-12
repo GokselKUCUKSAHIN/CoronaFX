@@ -2,17 +2,14 @@ package com.jellybeanci;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static com.jellybeanci.GetData.readFromWeb;
+import java.util.Optional;
 
 public class Controller
 {
@@ -31,23 +28,31 @@ public class Controller
     {
         btnGetData.setDisable(true);
         Runnable r = () -> {
-            ArrayList<String> contList = null;
-            try
+            String input = textBox.getText().trim();
+            if (input.length() >= 1)
             {
-                buttonChangeText(btnGetData, "Getting Data...");
-                contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-                buttonChangeText(btnGetData, "Data Found Loading...");
-            }
-            catch (IOException e)
+                ArrayList<String> contList = null;
+                try
+                {
+                    buttonChangeText(btnGetData, "Getting Data...");
+                    //contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
+                    contList = GetData.getDataFromAnywhere(input);
+                    buttonChangeText(btnGetData, "Data Found Loading...");
+                    assert contList != null;
+                    Record.parse(contList);
+                    tableView.setItems(Country.getObservableList());
+                    countryListView.setItems(Country.getObservableList().sorted());
+                }
+                catch (IOException e)
+                {
+                    showMessage("ERROR!", "URL or File Not Found!", Alert.AlertType.ERROR);
+                }
+            } else
             {
-                e.printStackTrace();
+                showMessage("Warning!", "Textfild can not be Empty!", Alert.AlertType.WARNING);
             }
-            assert contList != null;
-            Record.parse(contList);
             buttonChangeText(btnGetData, "Get Data");
             btnGetData.setDisable(false);
-            tableView.setItems(Country.getObservableList());
-            countryListView.setItems(Country.getObservableList().sorted());
         };
         new Thread(r).start();
     }
@@ -148,6 +153,19 @@ public class Controller
             }
         });
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+    }
+
+    private static void showMessage(String title, String message, Alert.AlertType alertType)
+    {
+        Platform.runLater(() -> {
+            // Update UI here.
+            Alert alert = new Alert(alertType);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
 
     }
 }
