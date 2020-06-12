@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Record
+public class Record implements Comparable<Record>
 {
 
     private final ObjectProperty<LocalDate> date;
@@ -85,8 +85,10 @@ public class Record
                                     Integer.parseInt(matcher.group(2)),
                                     Integer.parseInt(matcher.group(3)),
                                     Integer.parseInt(matcher.group(4)),
-                                    Integer.parseInt(matcher.group(5)),
-                                    Integer.parseInt(matcher.group(6))));
+                                    Math.abs(Integer.parseInt(matcher.group(5))),
+                                    Math.abs(Integer.parseInt(matcher.group(6)))
+                            )
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -95,5 +97,11 @@ public class Record
                 }
             }
         }
+    }
+
+    @Override
+    public int compareTo(Record o)
+    {
+        return date.get().compareTo(o.date.get());
     }
 }

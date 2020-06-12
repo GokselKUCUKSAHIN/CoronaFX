@@ -3,16 +3,22 @@ package com.jellybeanci;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class Controller
 {
+
+    @FXML
+    private LineChart<String, Integer> lineChart;
 
     @FXML
     private Button btnShow;
@@ -74,10 +80,21 @@ public class Controller
     @FXML
     protected void getSelectedCountries()
     {
+        lineChart.getData().clear();
         ObservableList<Country> selectedCountries = countryListView.getSelectionModel().getSelectedItems();
         for (Country country : selectedCountries)
         {
-            System.out.println(country.toString());
+            XYChart.Series dataSeries = new XYChart.Series();
+            dataSeries.setName(country.getCode());
+            ObservableList<Record> recs = country.getRecordList();
+            //recs.sorted(Comparator.reverseOrder());
+            int total = 0;
+            for (Record record : recs)
+            {
+                total += record.getCases();
+                dataSeries.getData().add(new XYChart.Data<String, Integer>(record.getDate().toString(), total));
+            }
+            lineChart.getData().add(dataSeries);
         }
     }
 
@@ -153,7 +170,7 @@ public class Controller
             }
         });
         countryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
+        lineChart.getXAxis().setAutoRanging(true);
     }
 
     private static void showMessage(String title, String message, Alert.AlertType alertType)
