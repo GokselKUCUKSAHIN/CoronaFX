@@ -3,10 +3,8 @@ package com.jellybeanci;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class GetData
 {
@@ -18,7 +16,6 @@ public class GetData
         File downloadDir = new File("Downloads");
         if (!downloadDir.exists())
         {
-            //System.out.println(downloadDir.getName() + "Download klasörü oluşturuluyor.");
             final boolean mkdir = downloadDir.mkdir();
         }
         File fileName = new File("Downloads/" + LocalDate.now() + ".xml");
