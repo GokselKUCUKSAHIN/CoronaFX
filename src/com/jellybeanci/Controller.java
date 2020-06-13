@@ -25,6 +25,9 @@ public class Controller
     private LineChart<?, ?> lineChart;
 
     @FXML
+    private CategoryAxis continentAxis;
+    
+    @FXML
     private CategoryAxis x;
 
     @FXML
@@ -47,14 +50,13 @@ public class Controller
             String input = textBox.getText().trim();
             if (input.length() >= 1)
             {
-                ArrayList<String> contList = null;
+                ArrayList<String> contList;
                 try
                 {
                     buttonChangeText(btnGetData, "Getting Data...");
                     //contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
                     contList = GetData.getDataFromAnywhere(input);
                     buttonChangeText(btnGetData, "Data Found Loading...");
-                    assert contList != null;
                     Record.parse(contList);
                     tableView.setItems(Country.getObservableList());
                     countryListView.setItems(Country.getObservableList().sorted());
