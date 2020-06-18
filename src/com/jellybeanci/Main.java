@@ -9,6 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.net.URL;
+
 public class Main extends Application
 {
 
@@ -34,7 +37,14 @@ public class Main extends Application
                 }
                 case F2:
                 {
-                    System.out.println("Hello Suckers");
+                    try
+                    {
+                        Desktop.getDesktop().browse(new URL("https://www.youtube.com/watch?v=l482T0yNkeo").toURI());
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.printStackTrace();
+                    }
                     break;
                 }
             }

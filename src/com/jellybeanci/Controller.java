@@ -1,5 +1,7 @@
 package com.jellybeanci;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,16 +10,20 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class Controller
 {
 
+    private static Timeline update;
+
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private StackedBarChart<?, ?> barChart;
 
@@ -26,7 +32,7 @@ public class Controller
 
     @FXML
     private CategoryAxis continentAxis;
-    
+
     @FXML
     private CategoryAxis x;
 
@@ -50,20 +56,32 @@ public class Controller
             String input = textBox.getText().trim();
             if (input.length() >= 1)
             {
-                ArrayList<String> contList;
-                try
+                if (input.toLowerCase().equals("execute order 66"))
                 {
-                    buttonChangeText(btnGetData, "Getting Data...");
-                    //contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
-                    contList = GetData.getDataFromAnywhere(input);
-                    buttonChangeText(btnGetData, "Data Found Loading...");
-                    Record.parse(contList);
-                    tableView.setItems(Country.getObservableList());
-                    countryListView.setItems(Country.getObservableList().sorted());
+                    showMessage("Execute", "Yes my Lord!", Alert.AlertType.CONFIRMATION);
+                    input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
+                } else if (input.toLowerCase().equals("do a barrel roll"))
+                {
+                    update.play();
+                    input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
                 }
-                catch (IOException e)
+                else
                 {
-                    showMessage("ERROR!", "URL or File Not Found!", Alert.AlertType.ERROR);
+                    ArrayList<String> contList;
+                    try
+                    {
+                        buttonChangeText(btnGetData, "Getting Data...");
+                        //contList = GetData.readFromWeb("https://opendata.ecdc.europa.eu/covid19/casedistribution/xml/");
+                        contList = GetData.getDataFromAnywhere(input);
+                        buttonChangeText(btnGetData, "Data Found Loading...");
+                        Record.parse(contList);
+                        tableView.setItems(Country.getObservableList());
+                        countryListView.setItems(Country.getObservableList().sorted());
+                    }
+                    catch (IOException e)
+                    {
+                        showMessage("ERROR!", "URL or File Not Found!", Alert.AlertType.ERROR);
+                    }
                 }
             } else
             {
@@ -88,6 +106,15 @@ public class Controller
             btnGetData.setText(Math.random() + "");
         });
     }
+
+    private void roll(double degree)
+    {
+        Platform.runLater(() -> {
+            // Update UI here.
+            this.borderPane.setRotate(borderPane.getRotate() + degree);
+        });
+    }
+
 
     @FXML
     protected void getSelectedCountries()
@@ -171,6 +198,14 @@ public class Controller
     @FXML
     private void initialize()
     {
+        update = new Timeline(new KeyFrame(Duration.millis(16), e -> {
+            //60 fps
+            roll(1);
+        }));
+        update.setCycleCount(360);
+        update.setRate(1);
+        update.setAutoReverse(false);
+
         //Table View
         countryName.setCellValueFactory(new PropertyValueFactory<>("name"));
         totalCases.setCellValueFactory(new PropertyValueFactory<>("totalCases"));

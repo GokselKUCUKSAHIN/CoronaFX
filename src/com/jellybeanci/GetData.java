@@ -41,10 +41,10 @@ public class GetData
 
     public static ArrayList<String> getDataFromAnywhere(String path) throws IOException
     {
+
         Reader reader;
         if (isURL(path))
         {
-
             reader = new FileReader(download(path));
         } else
         {
@@ -96,9 +96,10 @@ public class GetData
         }
         return records;
     }
+    
 
     public static boolean isURL(String path)
     {
-        return (path.matches("http[s]?://(www)?(.*)"));
+        return (path.matches("http[s]?://(.*)"));
     }
 }
