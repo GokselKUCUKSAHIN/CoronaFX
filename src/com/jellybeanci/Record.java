@@ -47,7 +47,7 @@ public class Record implements Comparable<Record>
 
     public static void parse(ArrayList<String> recordList)
     {
-        String regex = "<record><dateRep>(.+)</dateRep><day>(.+)</day><month>(.+)</month><year>(.+)</year><cases>(.+)</cases><deaths>(.+)</deaths><countriesAndTerritories>(.+)</countriesAndTerritories><geoId>(.+)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData2018>(\\d{1,})</popData2018><continentExp>(.+)</continentExp></record>";
+        String regex = "<record><dateRep>(.+)</dateRep><day>(.+)</day><month>(.+)</month><year>(.+)</year><cases>(.+)</cases><deaths>(.+)</deaths><countriesAndTerritories>(.+)</countriesAndTerritories><geoId>(.+)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData201[89]>(\\d{1,})</popData201[89]><continentExp>(.+)</continentExp></record>";
         Pattern recordPattern = Pattern.compile(regex);
         for (String record : recordList)
         {
