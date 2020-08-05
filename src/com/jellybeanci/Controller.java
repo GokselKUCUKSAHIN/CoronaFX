@@ -24,23 +24,12 @@ public class Controller
 
     @FXML
     private BorderPane borderPane;
-    @FXML
-    private StackedBarChart<?, ?> barChart;
 
     @FXML
     private LineChart<?, ?> lineChart;
 
     @FXML
-    private CategoryAxis continentAxis;
-
-    @FXML
     private CategoryAxis x;
-
-    @FXML
-    private NumberAxis y;
-
-    @FXML
-    private Button btnShow;
 
     @FXML
     private TextField textBox;
@@ -59,11 +48,11 @@ public class Controller
                 if (input.toLowerCase().equals("execute order 66"))
                 {
                     showMessage("Execute", "Yes my Lord!", Alert.AlertType.CONFIRMATION);
-                    input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
+                    //input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
                 } else if (input.toLowerCase().equals("do a barrel roll"))
                 {
                     update.play();
-                    input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
+                    //input = "C:\\Users\\Jellybeanci\\source\\Java\\CoronaFX\\Downloads\\2020-06-13.xml";
                 }
                 else
                 {
@@ -85,7 +74,7 @@ public class Controller
                 }
             } else
             {
-                showMessage("Warning!", "Textfild can not be Empty!", Alert.AlertType.WARNING);
+                showMessage("Warning!", "Text Field can not be Empty!", Alert.AlertType.WARNING);
             }
             buttonChangeText(btnGetData, "Get Data");
             btnGetData.setDisable(false);
@@ -98,6 +87,7 @@ public class Controller
         Platform.runLater(() -> button.setText(text));
     }
 
+/*
     @FXML
     protected void threadTestButton()
     {
@@ -106,6 +96,7 @@ public class Controller
             btnGetData.setText(Math.random() + "");
         });
     }
+*/
 
     private void roll(double degree)
     {
@@ -207,7 +198,7 @@ public class Controller
         update.setAutoReverse(false);
 
         //Table View
-        countryName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        countryName.setCellValueFactory(new PropertyValueFactory< >("name"));
         totalCases.setCellValueFactory(new PropertyValueFactory<>("totalCases"));
         newCases.setCellValueFactory(new PropertyValueFactory<>("newCases"));
         totalDeaths.setCellValueFactory(new PropertyValueFactory<>("totalDeaths"));
