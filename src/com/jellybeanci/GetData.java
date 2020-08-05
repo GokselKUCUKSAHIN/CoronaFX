@@ -16,7 +16,10 @@ public class GetData
         File downloadDir = new File("Downloads");
         if (!downloadDir.exists())
         {
-            final boolean mkdir = downloadDir.mkdir();
+            if(!downloadDir.mkdir())
+            {
+                System.out.println("Something went wrong! Downloads folder can not be created.");
+            }
         }
         File fileName = new File("Downloads/" + LocalDate.now() + ".xml");
         if (!fileName.exists() && !fileName.isDirectory())
@@ -32,7 +35,7 @@ public class GetData
                 {
                     writer.write(line + "\n");
                 }
-                //System.out.println(fileName.getName() + " indirildi.");
+                //System.out.println(fileName.getName() + " downloaded.");
             }
         }
         return fileName;
