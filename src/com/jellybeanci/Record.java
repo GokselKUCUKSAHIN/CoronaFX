@@ -1,10 +1,7 @@
 package com.jellybeanci;
 
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,10 +22,6 @@ public class Record implements Comparable<Record>
         this.deaths = new SimpleIntegerProperty(deaths);
     }
 
-    public int getDateNumber()
-    {
-        return this.dateNumber.get();
-    }
     public String getDateString()
     {
         return dateString.get();
@@ -46,7 +39,7 @@ public class Record implements Comparable<Record>
 
     public static void parse(ArrayList<String> recordList)
     {
-        String regex = "<record><dateRep>(.+)</dateRep><day>(.+)</day><month>(.+)</month><year>(.+)</year><cases>(.+)</cases><deaths>(.+)</deaths><countriesAndTerritories>(.+)</countriesAndTerritories><geoId>(.+)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData201[89]>(\\d{1,})</popData201[89]><continentExp>(.+)(</continentExp><Cumulative_number_for_14_days_of_COVID-19_cases_per_100000>(.*)</Cumulative_number_for_14_days_of_COVID-19_cases_per_100000>)?</record>";
+        String regex = "<record><dateRep>(.+)</dateRep><day>(.+)</day><month>(.+)</month><year>(.+)</year><cases>(.+)</cases><deaths>(.+)</deaths><countriesAndTerritories>(.+)</countriesAndTerritories><geoId>(.+)</geoId><countryterritoryCode>(.*)</countryterritoryCode><popData201[89]>(\\d+)</popData201[89]><continentExp>(.+)(</continentExp><Cumulative_number_for_14_days_of_COVID-19_cases_per_100000>(.*)</Cumulative_number_for_14_days_of_COVID-19_cases_per_100000>)?</record>";
         Pattern recordPattern = Pattern.compile(regex);
         for (String record : recordList)
         {
@@ -90,6 +83,6 @@ public class Record implements Comparable<Record>
     @Override
     public int compareTo(Record other)
     {
-        return ((Integer) this.dateNumber.get()).compareTo(other.dateNumber.get());
+        return Integer.compare(this.dateNumber.get(), other.dateNumber.get());
     }
 }
