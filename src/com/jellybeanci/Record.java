@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 public class Record implements Comparable<Record>
 {
-
     //private final ObjectProperty<LocalDate> date;
     private final IntegerProperty dateNumber;
     private final IntegerProperty cases;
@@ -60,7 +59,7 @@ public class Record implements Comparable<Record>
                     if (!Country.countries.containsKey(matcher.group(8)))
                     {
                         //System.out.println(matcher.group(8));
-                        Country.countries.putIfAbsent(matcher.group(8),
+                        Country.countries.put(matcher.group(8),
                                 new Country(
                                         matcher.group(7),
                                         matcher.group(8),

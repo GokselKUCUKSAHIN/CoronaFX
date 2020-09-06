@@ -194,7 +194,7 @@ public class Controller
             roll(1);
         }));
         update.setCycleCount(360);
-        update.setRate(1);
+        update.setRate(1.2);
         update.setAutoReverse(false);
 
         //Table View
