@@ -1,10 +1,7 @@
 package com.jellybeanci;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,13 +12,13 @@ import java.net.URL;
 public class Main extends Application
 {
 
-    public static ObservableList<Node> child;
+    //public static ObservableList<Node> child;
     //
     private static final String title = "CoronaFX -JellyBeanci";
     public static final int width = 800;
     public static final int height = 800;
 
-    private ObservableList<Country> countryData = FXCollections.observableArrayList();
+    //private final ObservableList<Country> countryData = FXCollections.observableArrayList();
 
     @Override
     public void start(Stage stage) throws Exception
@@ -56,11 +53,12 @@ public class Main extends Application
         stage.show();
         root.requestFocus();
     }
-
+    /*
     public ObservableList<Country> getCountryData()
     {
         return countryData;
     }
+    */
 
     public static void main(String[] args)
     {
